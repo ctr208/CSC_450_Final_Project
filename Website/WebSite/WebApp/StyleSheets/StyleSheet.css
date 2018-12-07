@@ -1,0 +1,74 @@
+﻿
+.selectCourse {
+    margin: 5px;
+    visibility: hidden
+}
+
+select {
+    margin: 5px;
+}
+
+h5 {
+    margin: 5px
+}
+
+.schedule{
+    height:1000px;
+    width:80%;
+    margin: 15px;
+
+}
+
+.tableDays {
+    border:double;
+    text-align:center;
+    width: 10%;
+}
+
+.tableCells {
+    width: 10%;
+    border: double;
+    text-align:center;
+    font-size:25px;
+}
+
+.tableTimeStamp {
+    text-align: center;
+    border: double;
+}
+
+th {
+    width: 5%;
+}
+
+.main-wrapper {
+    display: flex;
+    height: 80%;
+
+}
+
+
+
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+}
+
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 20px;
+        width: 50%;
+        border-radius: 5px;
+        background: #ffffff;
+        cursor: pointer;
+        margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+        /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/ /* Add cool effects to your sliders! */
+    }
+
+
+
+/*------------------------------------------^^^ IDK IF WE NEED THE CSS ABOVE ^^^-------------------------------------------------------*/
+
+
+
+

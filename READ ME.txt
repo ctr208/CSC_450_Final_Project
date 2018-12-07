@@ -1,0 +1,5 @@
+Dump_File: Contains a dump file with the data and structure that we used for our database
+
+Update_Database: Contains a project that was used to gather information and write to our database 
+
+Website: Contains our final project

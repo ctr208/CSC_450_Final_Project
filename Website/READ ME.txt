@@ -1,0 +1,32 @@
+WebSite is a solution for Visual Studio 2017
+
+*NO MAJOR CHANGES SINCE DEMO ON 12/4/2018
+
+This project pulls data from a MYSQL database.
+The connection string can be found in the web.config file.
+
+The database we were using was on our individual machines (no remote access) so in order for this website to work properly
+you will need...
+- MYSQL WorkBench installed
+- Import Dump file to MYSQL WorkBench
+- Update connection string with your credentials in web.config 
+----------------------------------------------------------------------------------------------
+Functionality:
+1.) User provides a Subject and CourseNumber
+2.) Click add
+3.) Repeat steps 1 and 2 until atleast 4 courses are added(no more than 6)
+4.) Click Search
+5.) Click CRN in schedule to get more information on right side of screen
+6.) Click search again to get a different schedule with the same courses
+
+
+
+UpComing Functionality:
+- Add Section for courses
+- Input Work Schedule
+- Input desired days
+- Input desired times
+- Rework Schedule appearence
+- Add section to disaply all CRN's at once for desired courses
+- Add error handling for nonexistent courses
+- Display classes that have several different start and end dates off to the side

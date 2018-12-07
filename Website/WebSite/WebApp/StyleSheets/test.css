@@ -1,0 +1,161 @@
+﻿.desiredCourse {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.schedule-wrapper {
+    margin-left: 50px;
+    height: 100%;
+    display: flex;
+    width: 50%;
+}
+
+.time {
+    /*margin-top: 50px;*/
+    height: 60px;
+    vertical-align: middle;
+}
+
+.timeGroup {
+    margin-top: 50px;
+}
+
+.dayGroup {
+    position: relative;
+    margin-left: 50px;
+    width: 15%;
+    text-align: center;
+    font-weight: bold;
+    font: inherit;
+    font-size: 2.0rem;
+}
+
+.courseItem {
+    /*margin-top: 175px;*/
+    /*top: 120px;*/
+    position: absolute;
+    padding-top: 10px;
+    display: flex;
+    height: 100px;
+    width: 100%;
+    border: 1px solid;
+    border-color: black;
+    box-shadow: 5px 5px 20px #888888;
+    background-color: #74a2ff;
+    border-radius: 20px;
+    font-weight: bold;
+    font: inherit;
+    font-size: 1rem;
+    color: white;
+}
+
+    .courseItem p {
+        margin: auto;
+        text-align: center;
+    }
+
+    .courseItem:hover {
+        opacity: .9;
+        cursor: pointer;
+    }
+
+.courseItem2 {
+    padding-top: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    height: 75px;
+    width: 100px;
+    margin: 15px;
+    border: 1px solid;
+    border-color: black;
+    box-shadow: 5px 5px 20px #888888;
+    background-color: #74a2ff;
+    border-radius: 20px;
+    font-weight: bold;
+    font: inherit;
+    font-size: 1rem;
+    color: white;
+}
+
+    .courseItem2:hover {
+        opacity: .9;
+        cursor: pointer;
+    }
+
+.line {
+    position: absolute;
+    height: 1px;
+    content: "";
+    width: 42%;
+    display: block;
+    border-bottom: double;
+    left: 25%;
+    opacity: .25;
+    z-index: -1;
+    margin-top: -10px;
+    margin-left: 15px;
+}
+
+.autocomplete {
+    /*the container must be positioned relative:*/
+    position: relative;
+    display: inline-block;
+}
+
+input {
+    border: 1px solid transparent;
+    background-color: #f1f1f1;
+    padding: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+    input[type=text] {
+        background-color: #f1f1f1;
+        width: 100%;
+    }
+
+    input[type=submit] {
+        background-color: DodgerBlue;
+        color: #fff;
+        cursor: pointer;
+    }
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    color: black;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    width: 100px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding to account for vertical scrollbar */
+}
+
+    .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+        max-height: 200px;
+    }
+
+        .autocomplete-items div:hover {
+            /*when hovering an item:*/
+            background-color: #e9e9e9;
+        }
+
+.autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+}

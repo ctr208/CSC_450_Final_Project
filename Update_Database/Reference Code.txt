@@ -1,0 +1,518 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using HtmlAgilityPack;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium.Firefox;
+using System.IO;
+using System.Threading;
+using System.Reflection;
+using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
+
+namespace ConsoleApp
+{
+    class Program
+
+
+    {
+        static void Main(string[] args)
+        {
+            //Get HTML
+            //getHTML();
+            //Format HTML
+            //Thread.Sleep(30000);
+            //formatHTML();
+            convertToBitArray();
+            //writeToDataBase();
+            //Write to database
+            //writeToTextFile(00001,"MSA",101,1,"M","3","Test","MWF","11-12",0,0,0,0,0,"test","test","test","test");
+        }
+
+        private static void convertToBitArray()
+        {
+            string connectionString = null;
+            string sql = null;
+            DataTable myDataTable = new DataTable();
+            connectionString = "server=localhost;port=3306;user=root;database=courses;password=Deepw00d";
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            string crnValue = "";
+            string time = "";
+            string days = "";
+
+
+
+
+            sql = "select crn,time,days from course_table;";
+            int counter = 0;
+            string conCatString = "";
+
+            try
+            {
+                conn.Open();
+                MySqlCommand sqlcmd = new MySqlCommand(sql, conn);
+                MySqlDataReader reader = sqlcmd.ExecuteReader();
+                
+                while (reader.Read())
+                {
+                    crnValue = reader.GetString("CRN");
+                    time = reader.GetString("TIME");
+                    days = reader.GetString("DAYS");
+                    conCatString = crnValue + "," + time + "," + days;
+
+                    string filePath = @"C:\Users\dakot\source\repos\ConsoleApp\ConsoleApp\DayTimes.txt";
+                    //System.IO.File.WriteAllText(filePath, sql);
+
+
+                    using (System.IO.StreamWriter file =
+                        new System.IO.StreamWriter(filePath, true))
+                    {
+                        file.WriteLine(conCatString);
+                        conCatString = "";
+                    }
+
+
+                    counter += 1;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+            Console.WriteLine(counter);
+            Console.ReadLine();
+
+            return;
+
+
+        }
+
+
+
+        private static void writeToTextFile(int crn, string subject, int coursenum,
+                                            int section, string campus, string credit,
+                                            string title, string days, string time,
+                                            int seatsrem, int wlcap, int wlact,
+                                            int wlrem, int rsvdrem, string instructor,
+                                            string dates, string session, string location)
+        {
+
+            title = title.Replace("'", "");
+            instructor = instructor.Replace("'", "");
+            dates = dates.Replace("'", "");
+            session = session.Replace("'", "");
+            location = location.Replace("'", "");
+
+
+            string sql = $"insert into course_table values ('{crn}','{subject}',{coursenum},'{section}','{campus}','{credit}','{title}','{days}','{time}',{seatsrem},{wlcap},{wlact},{wlrem}," +
+                $"{rsvdrem},'{instructor}','{dates}','{session}','{location}');";
+
+            string filePath = @"C:\Users\dakot\source\repos\ConsoleApp\ConsoleApp\queries.txt";
+            //System.IO.File.WriteAllText(filePath, sql);
+
+
+            using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(filePath, true))
+            {
+                file.WriteLine(sql);
+            }
+
+
+        }
+
+        private static void writeToDataBase(int crn, string subject, int coursenum,
+                                            int section, string campus, string credit,
+                                            string title, string days, string time,
+                                            int seatsrem, int wlcap, int wlact,
+                                            int wlrem,int rsvdrem, string instructor, 
+                                            string dates,string session, string location)
+        {
+            string sql;
+            string connectionString = null;
+
+            connectionString = "server=localhost;port=3306;user=root;database=courses;password=Deepw00d";
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlCommand command = conn.CreateCommand();
+            command.Parameters.AddWithValue("@crn", crn);
+            command.Parameters.AddWithValue("@subject", subject);
+            command.Parameters.AddWithValue("@coursenum", coursenum);
+            command.Parameters.AddWithValue("@section", section);
+            command.Parameters.AddWithValue("@campus", campus);
+            command.Parameters.AddWithValue("@credit", credit);
+            command.Parameters.AddWithValue("@title", title);
+            command.Parameters.AddWithValue("@days", days);
+            command.Parameters.AddWithValue("@time", time);
+            command.Parameters.AddWithValue("@seatsrem", seatsrem);
+            command.Parameters.AddWithValue("@wlcap", wlcap);
+            command.Parameters.AddWithValue("@wlact", wlact);
+            command.Parameters.AddWithValue("@wlrem", wlrem);
+            command.Parameters.AddWithValue("@rsvdrem", rsvdrem);
+            command.Parameters.AddWithValue("@instructor", instructor);
+            command.Parameters.AddWithValue("@dates", dates);
+            command.Parameters.AddWithValue("@session", session);
+            command.Parameters.AddWithValue("@location", location);
+
+            sql = "insert into course_table VALUES " + "(@crn,@subject,@coursenum,@section,@campus,@credit,@title,@days,@time,@seatsrem,@wlcap,@wlact,@wlrem,@rsvdrem,@instructor,@dates,@session,@location);";
+
+            command.CommandText = sql;
+
+            try
+            { 
+                conn.Open();
+                command.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+            return;
+        }
+
+        private static void formatHTML()
+        {
+            //CONVERTING HTML TO DATATABLE
+
+            Console.WriteLine("Starting to Parse HTML");
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+
+            //string currentDirectory = Directory.GetCurrentDirectory();
+            //string filePath = System.IO.Path.Combine(currentDirectory, "Data", "Courses.txt");
+            string filePath = @"C:\Users\dakot\source\repos\ConsoleApp\ConsoleApp\html.txt";
+            string htmlCode = System.IO.File.ReadAllText(filePath);
+
+            doc.LoadHtml(htmlCode);
+
+
+            //Remove uneeded html
+            foreach (var row in doc.DocumentNode.SelectNodes("//table[contains(@class, 'plaintable' )]"))
+            {
+                row.Remove();
+            }
+
+            foreach (var row in doc.DocumentNode.SelectNodes("//table[contains(@class, 'infotexttable' )]"))
+            {
+                row.Remove();
+            }
+
+
+
+
+            var headers = doc.DocumentNode.SelectNodes("//tr/th");
+            DataTable table = new DataTable();
+
+
+            foreach (HtmlNode header in headers)
+                try
+                {
+                    if (table.Columns.Count <= 18)
+                    {
+
+                        if (header.InnerText.Length < 11)
+                        {
+                            table.Columns.Add(header.InnerText); // create columns from th
+                                                                 // select rows with td elements
+
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+            foreach (var row in doc.DocumentNode.SelectNodes("//tr[td]"))
+            {
+
+                table.Rows.Add(row.SelectNodes("td").Select(td => td.InnerText).ToArray());
+
+
+            }
+
+
+
+
+            //MODIFYING DATATABLE
+
+            for (int row = 0; row <= table.Rows.Count - 1; row++)
+            {
+
+                for (int col = 0; col <= table.Columns.Count - 1; col++)
+                {
+
+
+
+                    //if ((col == 0) && (table.Rows[row][0].ToString() == " "))
+                    int n1;
+                    bool isNumeric1 = int.TryParse(table.Rows[row][0].ToString(), out n1);
+                    if ((col == 0) && !isNumeric1)
+                    {
+                        int currentRow = row;
+
+                        //update previous record that conatinas the CRN
+
+                        //day
+                        table.Rows[currentRow - 1][7] = table.Rows[currentRow - 1][7].ToString() + "*" + table.Rows[currentRow][7].ToString();
+                        //time
+                        table.Rows[currentRow - 1][8] = table.Rows[currentRow - 1][8].ToString() + "*" + table.Rows[currentRow][8].ToString();
+                        //instructor
+                        table.Rows[currentRow - 1][14] = table.Rows[currentRow - 1][14].ToString() + "*" + table.Rows[currentRow][14].ToString();
+                        //date
+                        table.Rows[currentRow - 1][15] = table.Rows[currentRow - 1][15].ToString() + "*" + table.Rows[currentRow][15].ToString();
+                        //location
+                        table.Rows[currentRow - 1][17] = table.Rows[currentRow - 1][17].ToString() + "*" + table.Rows[currentRow][17].ToString();
+
+                        table.Rows[row].Delete();
+                        //go back a row since currentRow gets deleted
+                        row--;
+
+                    }
+                }
+
+            }
+
+            string tempCRN;
+            string tempCourseNum;
+            string tempSection;
+            string tempCredit;
+            string tempSeatsRem;
+            string tempWlCap;
+            string tempWlact;
+            string tempWlRem;
+            string tempRsvdRem;
+            
+
+
+            int crn;
+            string subject;
+            int coursenum;
+            int section;
+            string campus;
+            string credit;
+            string title;
+            string days;
+            string time;
+            int seatsrem;
+            int wlcap;
+            int wlact;
+            int wlrem;
+            int rsvdrem;
+            string instructor;
+            string dates;
+            string session;
+            string location;
+
+            int n;
+            Boolean isNumeric;
+
+
+
+            foreach (DataRow row in table.Rows)
+            {
+                // 1 
+                tempCRN = row.ItemArray[0].ToString();
+                crn = Convert.ToInt32(tempCRN);
+
+                //2 
+                subject = row.ItemArray[1].ToString();
+
+                //3 
+                tempCourseNum = row.ItemArray[2].ToString();
+                coursenum = Convert.ToInt32(tempCourseNum);
+
+                //4 
+                tempSection = row.ItemArray[3].ToString();
+                section = Convert.ToInt32(tempSection);
+
+                //5 
+                campus = row.ItemArray[4].ToString();
+
+                //6  
+                //tempCredit = row.ItemArray[5].ToString();
+                //credit = Convert.ToDouble(tempCredit);
+                credit = row.ItemArray[5].ToString();
+
+                //7 
+                title = row.ItemArray[6].ToString();
+
+                //8 
+                days = row.ItemArray[7].ToString();
+
+                //9 
+                time = row.ItemArray[8].ToString();
+
+                //10 
+                tempSeatsRem = row.ItemArray[9].ToString();
+                seatsrem = Convert.ToInt32(tempSeatsRem);
+
+                //11
+                tempWlCap = row.ItemArray[10].ToString();
+                wlcap = Convert.ToInt32(tempWlCap);
+
+                //12 
+                tempWlact = row.ItemArray[11].ToString();
+                wlact = Convert.ToInt32(tempWlact);
+
+                //13
+                
+                isNumeric = int.TryParse(row.ItemArray[12].ToString(), out n);
+                if (!isNumeric)
+                {
+                    wlrem = 0;
+                }
+                else
+                {
+                    tempWlRem = row.ItemArray[12].ToString();
+                    wlrem = Convert.ToInt32(tempWlRem);
+
+                }
+
+
+                //14 
+                
+                isNumeric = int.TryParse(row.ItemArray[13].ToString(), out n);
+                if (!isNumeric)
+                {
+                    rsvdrem = 0;
+                } else
+                {
+                    tempRsvdRem = row.ItemArray[13].ToString();
+                    rsvdrem = Convert.ToInt32(tempRsvdRem);
+
+                }
+
+
+                //15 
+                instructor = row.ItemArray[14].ToString();
+
+                //16
+                dates = row.ItemArray[15].ToString();
+
+                //17
+                if (row.ItemArray[16].ToString() == null)
+                {
+                    session = "null";
+                }
+                else
+                {
+                    session = row.ItemArray[16].ToString();
+                }
+
+                //18 
+                if (row.ItemArray[17].ToString() == null)
+                {
+                    location = "null";
+                } else
+                {
+                    location = row.ItemArray[17].ToString();
+                }
+
+                writeToTextFile(crn, subject, coursenum, section, campus,
+                                credit, title, days, time, seatsrem, wlcap, wlact, wlrem, rsvdrem,
+                                instructor, dates, session, location);
+
+                
+                
+            }
+        }
+
+
+        private static void getHTML()
+        {
+            
+            //string filePath = System.IO.Path.Combine(currentDirectory, "Data", "courses.txt");
+            string filePath =  @"C:\Users\dakot\source\repos\ConsoleApp\ConsoleApp\html.txt";
+            string desktop = @"C:\Users\dakot\desktop\";
+
+            File.WriteAllText(filePath, "");
+
+            Console.WriteLine("Starting Selenium");
+
+
+            string driverPath = System.IO.Path.Combine(desktop, "Drivers");
+
+            IWebDriver driver = new ChromeDriver(driverPath)
+            {
+                Url = "https://seanet.uncw.edu/TEAL/twbkwbis.P_GenMenu?name=homepage"
+
+            };
+
+            IWebElement link;
+
+            link = driver.FindElement(By.LinkText("Search for Courses"));
+
+            link.Click();
+
+            //////////////////////////////////////////////////////////
+
+            IWebElement mySelectElement = driver.FindElement(By.Name("term_in"));
+
+            SelectElement dropDown = new SelectElement(mySelectElement);
+
+            dropDown.SelectByText("Fall 2018");
+
+
+            IWebElement submitButton;
+
+            submitButton = driver.FindElement(By.TagName("form"));
+
+            submitButton.Submit();
+
+            //////////////////////////////////////////////////////////
+
+            IWebElement mySelectElement2 = driver.FindElement(By.Id("subj_id"));
+
+            SelectElement dropDown2 = new SelectElement(mySelectElement2);
+
+            IList<IWebElement> options2 = dropDown2.Options;
+
+            foreach (IWebElement we in options2)
+            {
+                var str = we.Text;
+                dropDown2.SelectByText(str);
+            }
+
+            //dropDown2.SelectByText("Chemistry"); use this for testing purposes
+
+            IWebElement submitButton2;
+
+            submitButton2 = driver.FindElement(By.TagName("form"));
+
+
+            try
+            {
+                submitButton2.Submit();
+            }
+            catch
+            {
+                Console.WriteLine("help");
+            }
+            //////////////////////////////////////////////////////////
+
+            var html = driver.PageSource;
+
+            //StreamReader sr = new StreamReader(html);
+            //StreamWriter sw = new StreamWriter(@"C:\Users\ctr20\Projects\VisualStudio Projects\ReadHTML\ReadHTML\TextFile1.txt");
+
+            //var line = "";
+
+            Thread.Sleep(5000);
+
+            File.WriteAllText(filePath, html);
+
+            Console.WriteLine("Finished Selenium");
+
+        }
+    }
+}

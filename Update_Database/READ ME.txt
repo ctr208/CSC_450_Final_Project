@@ -1,0 +1,12 @@
+UpdateCourseDatabase is a solution for Visual Studio 2017
+
+At the moment, the only application it offers is to scrap SeaNet for courses offered only in the Fall 2018 
+by writing the source HTML to a text file via Selenium. It then formats the courses and prints them to the console. This code
+DOES NOT write to a database.
+
+The attached text file entitled "Reference Code" has implmentated code to Read, Format, and Write 
+course information to a database.
+
+
+Additionally, Line 236 determines which semester to pull classes from.
+Looks like... "dropDown.SelectByText("Fall 2018");"
